@@ -5,17 +5,19 @@
   <title>AI Workforce Readiness Analyzer</title>
   <style>
     :root {
-      --bg-body: #0b1120;
-      --bg-panel: #020617;
-      --border-subtle: #1f2937;
-      --accent-blue: #3b82f6;
-      --accent-blue-strong: #2563eb;
-      --text-main: #e5e7eb;
-      --text-muted: #9ca3af;
-      --text-strong: #f9fafb;
-      --danger: #ef4444;
-      --warning: #facc15;
-      --success: #22c55e;
+      /* Aon-inspired deep red palette */
+      --bg-body: #070506;
+      --bg-panel: #12060a;
+      --border-subtle: #3f1a22;
+      --accent-red: #d5001c;        /* primary Aon-like red */
+      --accent-red-soft: #f97373;   /* lighter red for accents */
+      --accent-red-deep: #7f0010;
+
+      --text-main: #f9fafb;
+      --text-muted: #e5e7ebcc;
+      --text-strong: #ffffff;
+
+      --danger: #f97373;
       --font-main: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
 
@@ -25,7 +27,8 @@
       margin: 0;
       padding: 0;
       font-family: var(--font-main);
-      background: radial-gradient(circle at top, #111827 0, #020617 55%, #000 100%);
+      background:
+        radial-gradient(circle at top, #2b0006 0, #080104 45%, #050104 100%);
       color: var(--text-main);
     }
 
@@ -40,12 +43,12 @@
     .container {
       width: 100%;
       max-width: 1100px;
-      background: linear-gradient(135deg, rgba(15,23,42,0.95), rgba(3,7,18,0.98));
+      background: radial-gradient(circle at top left, rgba(40,0,8,0.96), rgba(10,0,4,0.98));
       border-radius: 18px;
-      border: 1px solid rgba(148,163,184,0.15);
+      border: 1px solid rgba(148,27,52,0.35);
       box-shadow:
-        0 24px 48px rgba(15,23,42,0.7),
-        0 0 0 1px rgba(15,23,42,0.7);
+        0 24px 48px rgba(0,0,0,0.85),
+        0 0 0 1px rgba(15,10,12,0.9);
       padding: 20px 24px 26px;
       display: flex;
       flex-direction: column;
@@ -69,23 +72,25 @@
 
     .title {
       font-size: 1.6rem;
-      font-weight: 600;
-      letter-spacing: 0.02em;
+      font-weight: 650;
+      letter-spacing: 0.03em;
       color: var(--text-strong);
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
     }
 
     .title-chip {
       font-size: 0.7rem;
       text-transform: uppercase;
-      letter-spacing: 0.12em;
-      padding: 2px 8px;
+      letter-spacing: 0.16em;
+      padding: 2px 10px;
       border-radius: 999px;
-      border: 1px solid rgba(59,130,246,0.5);
-      color: var(--accent-blue);
-      background: radial-gradient(circle at top left, rgba(37,99,235,0.1), transparent 60%);
+      border: 1px solid rgba(213,0,28,0.75);
+      color: var(--accent-red-soft);
+      background:
+        linear-gradient(135deg, rgba(213,0,28,0.18), rgba(120,0,16,0.35));
+      box-shadow: 0 0 0 1px rgba(120,0,16,0.6);
     }
 
     .subtitle {
@@ -101,10 +106,11 @@
     }
 
     .panel {
-      background: radial-gradient(circle at top left, rgba(15,23,42,0.9), var(--bg-panel));
+      background:
+        radial-gradient(circle at top left, rgba(47,6,16,0.98), rgba(12,3,7,0.98));
       border-radius: 14px;
-      border: 1px solid rgba(55,65,81,0.8);
-      box-shadow: inset 0 0 0 1px rgba(15,23,42,0.8);
+      border: 1px solid rgba(83,23,35,0.95);
+      box-shadow: inset 0 0 0 1px rgba(15,7,10,0.9);
       padding: 14px 14px 16px;
       display: flex;
       flex-direction: column;
@@ -120,10 +126,10 @@
 
     .panel-title {
       font-size: 0.85rem;
-      font-weight: 500;
-      letter-spacing: 0.04em;
+      font-weight: 550;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
-      color: var(--text-muted);
+      color: rgba(249,250,251,0.8);
     }
 
     textarea {
@@ -132,8 +138,9 @@
       resize: vertical;
       padding: 10px 11px;
       border-radius: 10px;
-      border: 1px solid rgba(75,85,99,0.9);
-      background: radial-gradient(circle at top left, rgba(15,23,42,0.95), #020617);
+      border: 1px solid rgba(120,32,46,0.9);
+      background:
+        radial-gradient(circle at top left, rgba(33,7,14,0.98), rgba(8,2,5,0.98));
       color: var(--text-main);
       font-size: 0.9rem;
       line-height: 1.4;
@@ -141,14 +148,15 @@
       transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
     }
 
-    textarea::placeholder { color: #4b5563; }
+    textarea::placeholder { color: #6b7280; }
 
     textarea:focus {
-      border-color: rgba(59,130,246,0.8);
+      border-color: rgba(213,0,28,0.85);
       box-shadow:
-        0 0 0 1px rgba(59,130,246,0.6),
-        0 0 0 8px rgba(30,64,175,0.35);
-      background: radial-gradient(circle at top left, rgba(15,23,42,1), #020617);
+        0 0 0 1px rgba(248,113,113,0.8),
+        0 0 0 8px rgba(127,29,29,0.4);
+      background:
+        radial-gradient(circle at top left, rgba(40,9,18,1), rgba(8,2,5,1));
     }
 
     .controls-row {
@@ -163,8 +171,8 @@
       border: none;
       padding: 7px 16px;
       font-size: 0.8rem;
-      font-weight: 500;
-      letter-spacing: 0.04em;
+      font-weight: 550;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
       cursor: pointer;
       display: inline-flex;
@@ -174,30 +182,30 @@
     }
 
     .btn-primary {
-      background: linear-gradient(135deg, var(--accent-blue-strong), #1d4ed8);
-      color: #e5e7eb;
+      background: linear-gradient(135deg, var(--accent-red), #8b0012);
+      color: #fef2f2;
       box-shadow:
-        0 12px 24px rgba(37,99,235,0.35),
-        0 0 0 1px rgba(59,130,246,0.9);
+        0 12px 24px rgba(127,29,29,0.6),
+        0 0 0 1px rgba(251,113,133,0.9);
     }
 
     .btn-primary:hover {
-      background: linear-gradient(135deg, #1d4ed8, #1e40af);
+      background: linear-gradient(135deg, #c0001a, #7f0010);
       transform: translateY(-1px);
       box-shadow:
-        0 16px 28px rgba(37,99,235,0.45),
-        0 0 0 1px rgba(129,140,248,0.8);
+        0 16px 28px rgba(185,28,28,0.7),
+        0 0 0 1px rgba(254,202,202,0.9);
     }
 
     .btn-secondary {
-      background: rgba(15,23,42,0.9);
+      background: rgba(24,7,11,0.95);
       color: var(--text-muted);
-      border: 1px solid rgba(75,85,99,0.9);
+      border: 1px solid rgba(82,32,42,0.9);
     }
 
     .btn-secondary:hover {
-      background: rgba(17,24,39,0.9);
-      border-color: rgba(148,163,184,0.9);
+      background: rgba(31,8,13,0.98);
+      border-color: rgba(229,115,115,0.9);
       color: var(--text-main);
     }
 
@@ -221,8 +229,10 @@
 
     .chart-panel {
       border-radius: 10px;
-      border: 1px solid rgba(55,65,81,0.9);
-      background: radial-gradient(circle at 10% 0%, rgba(30,64,175,0.3), transparent 60%), radial-gradient(circle at 80% 100%, rgba(15,23,42,0.9), rgba(3,7,18,0.98));
+      border: 1px solid rgba(82,27,39,0.95);
+      background:
+        radial-gradient(circle at 10% 0%, rgba(127,29,29,0.4), transparent 55%),
+        radial-gradient(circle at 80% 100%, rgba(24,6,10,0.96), rgba(8,2,5,0.98));
       padding: 14px 14px 16px;
       display: flex;
       flex-direction: column;
@@ -240,7 +250,7 @@
       font-size: 0.8rem;
       text-transform: uppercase;
       letter-spacing: 0.08em;
-      color: var(--text-muted);
+      color: rgba(249,250,251,0.8);
     }
 
     .chart-subtitle {
@@ -258,8 +268,9 @@
       margin-top: 10px;
       padding: 8px 10px;
       border-radius: 10px;
-      border: 1px solid rgba(55,65,81,0.9);
-      background: radial-gradient(circle at top left, rgba(15,23,42,0.95), rgba(15,23,42,0.98));
+      border: 1px solid rgba(82,27,39,0.95);
+      background:
+        radial-gradient(circle at top left, rgba(40,9,18,0.98), rgba(18,6,10,0.98));
       font-size: 0.85rem;
       color: var(--text-main);
     }
@@ -268,7 +279,7 @@
       font-size: 0.75rem;
       text-transform: uppercase;
       letter-spacing: 0.08em;
-      color: var(--text-muted);
+      color: rgba(252,165,165,0.9);
       margin-bottom: 4px;
     }
 
@@ -278,12 +289,12 @@
     }
 
     .interpretation-link a {
-      color: #60a5fa;
+      color: #fecaca;
       text-decoration: underline;
     }
 
     .interpretation-link a:hover {
-      color: #bfdbfe;
+      color: #fee2e2;
     }
 
     @media (max-width: 900px) {
@@ -299,7 +310,7 @@
         <div class="title-block">
           <div class="title">
             AI Workforce Readiness Analyzer
-            <span class="title-chip">AI Workforce</span>
+            <span class="title-chip">Aon + Axis</span>
           </div>
           <div class="subtitle">
             Describe how you are using AI for today, keeping both client-facing and internal use cases in mind. Also describe your approach, if any, to preparing your employees to work with AI.
@@ -325,7 +336,9 @@
             <div class="interpretation-title">Overall Orientation</div>
             <div id="interpretationContent"></div>
             <div class="interpretation-link">
-              <a href="report.pdf" target="_blank" rel="noopener noreferrer">Download the full AI Workforce Readiness report (PDF)</a>
+              <a href="report.pdf" target="_blank" rel="noopener noreferrer">
+                Download the full AI Workforce Readiness report (PDF)
+              </a>
             </div>
           </div>
         </section>
@@ -371,7 +384,6 @@
 
         const scores = buildInitialScores();
         drawRadarChart("radarCanvas", scores);
-        // Do NOT update interpretation here (keep blank until Analyze)
       } catch (err) {
         console.error("Error loading sentimentsource.csv:", err);
         dimensions = [];
@@ -506,22 +518,22 @@
 
       let baseColor, fillColor, gridColor, axisColor, pointColor;
       if (rawMax < 5) {
-        baseColor  = "#ef4444";
-        fillColor  = "rgba(239,68,68,0.25)";
-        gridColor  = "rgba(127,29,29,0.9)";
-        axisColor  = "rgba(127,29,29,0.9)";
+        baseColor  = "#f97373";
+        fillColor  = "rgba(248,113,113,0.2)";
+        gridColor  = "rgba(127,29,29,0.85)";
+        axisColor  = "rgba(127,29,29,0.95)";
         pointColor = "#fecaca";
       } else if (rawMax < 20) {
-        baseColor  = "#facc15";
-        fillColor  = "rgba(250,204,21,0.25)";
-        gridColor  = "rgba(133,77,14,0.85)";
-        axisColor  = "rgba(133,77,14,0.85)";
-        pointColor = "#fef3c7";
+        baseColor  = "#fdba74";
+        fillColor  = "rgba(253,186,116,0.25)";
+        gridColor  = "rgba(146,64,14,0.9)";
+        axisColor  = "rgba(146,64,14,0.95)";
+        pointColor = "#fed7aa";
       } else {
-        baseColor  = "#22c55e";
-        fillColor  = "rgba(34,197,94,0.25)";
+        baseColor  = "#bbf7d0";
+        fillColor  = "rgba(22,163,74,0.25)";
         gridColor  = "rgba(22,101,52,0.9)";
-        axisColor  = "rgba(22,101,52,0.9)";
+        axisColor  = "rgba(22,101,52,0.95)";
         pointColor = "#bbf7d0";
       }
 
@@ -531,8 +543,8 @@
         centerX, centerY, 0,
         centerX, centerY, radius * 1.6
       );
-      radialBg.addColorStop(0, "rgba(15,23,42,0.4)");
-      radialBg.addColorStop(1, "rgba(15,23,42,0.95)");
+      radialBg.addColorStop(0, "rgba(24,4,8,0.65)");
+      radialBg.addColorStop(1, "rgba(12,3,7,0.98)");
       ctx.fillStyle = radialBg;
       ctx.fillRect(0, 0, width, height);
 
@@ -548,7 +560,7 @@
       }
 
       ctx.font = "11px system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";
-      ctx.fillStyle = "#cbd5f5";
+      ctx.fillStyle = "#fde68a";
 
       // Axes + multi-line labels
       scores.forEach((s, i) => {
@@ -565,7 +577,7 @@
 
         // Multi-line label
         const words = String(s.label).split(/\s+/);
-        const lineHeight = 12; // px between lines
+        const lineHeight = 12;
         const labelRadius = radius * 1.3;
         const baseX = centerX + labelRadius * Math.cos(angle);
         const baseY = centerY + labelRadius * Math.sin(angle);
@@ -640,7 +652,6 @@
 
       const desc = descriptionsMap[pattern];
       if (desc) {
-        // Show only the descriptive text, not the H/L code
         interpEl.textContent = desc;
       } else {
         interpEl.textContent = "No specific description found for this pattern.";
@@ -665,7 +676,7 @@
       errorBanner.style.display = "none";
       const scores = buildInitialScores();
       drawRadarChart("radarCanvas", scores);
-      interpEl.textContent = ""; // Reset to blank
+      interpEl.textContent = "";
     }
   </script>
 </body>
