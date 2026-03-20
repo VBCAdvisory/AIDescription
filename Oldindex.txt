@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>AI Workforce Readiness Analyzer</title>
+  <style>
+    :root {
+      --bg-body: #0b1120;
+      --bg-panel: #020617;
+      --border-subtle: #1f2937;
+      --accent-blue: #3b82f6;
+      --accent-blue-strong: #2563eb;
+      --text-main: #e5e7eb;
+      --text-muted: #9ca3af;
+      --text-strong: #f9fafb;
+      --danger: #ef4444;
+      --warning: #facc15;
+      --success: #22c55e;
+      --font-main: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: var(--font-main);
+      background: radial-gradient(circle at top, #111827 0, #020617 55%, #000 100%);
+      color: var(--text-main);
+    }
+
+    .app-shell {
+      min-height: 100vh;
+      display: flex;
+      align-items: stretch;
+      justify-content: center;
+      padding: 32px 16px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1100px;
+      background: linear-gradient(135deg, rgba(15,23,42,0.95), rgba(3,7,18,0.98));
+      border-radius: 18px;
+      border: 1px solid rgba(148,163,184,0.15);
+      box-shadow:
+        0 24px 48px rgba(15,23,42,0.7),
+        0 0 0 1px rgba(15,23,42,0.7);
+      padding: 20px 24px 26px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      border-bottom: 1px solid var(--border-subtle);
+      padding-bottom: 12px;
+    }
+
+    .title-block {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .title {
+      font-size: 1.6rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      color: var(--text-strong);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .title-chip {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      padding: 2px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(59,130,246,0.5);
+      color: var(--accent-blue);
+      background: radial-gradient(circle at top left, rgba(37,99,235,0.1), transparent 60%);
+    }
+
+    .subtitle {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      max-width: 640px;
+    }
+
+    .main-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+      gap: 18px;
+    }
+
+    .panel {
+      background: radial-gradient(circle at top left, rgba(15,23,42,0.9), var(--bg-panel));
+      border-radius: 14px;
+      border: 1px solid rgba(55,65,81,0.8);
+      box-shadow: inset 0 0 0 1px rgba(15,23,42,0.8);
+      padding: 14px 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .panel-title {
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 210px;
+      resize: vertical;
+      padding: 10px 11px;
+      border-radius: 10px;
+      border: 1px solid rgba(75,85,99,0.9);
+      background: radial-gradient(circle at top left, rgba(15,23,42,0.95), #020617);
+      color: var(--text-main);
+      font-size: 0.9rem;
+      line-height: 1.4;
+      outline: none;
+      transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
+    }
+
+    textarea::placeholder { color: #4b5563; }
+
+    textarea:focus {
+      border-color: rgba(59,130,246,0.8);
+      box-shadow:
+        0 0 0 1px rgba(59,130,246,0.6),
+        0 0 0 8px rgba(30,64,175,0.35);
+      background: radial-gradient(circle at top left, rgba(15,23,42,1), #020617);
+    }
+
+    .controls-row {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    button {
+      border-radius: 999px;
+      border: none;
+      padding: 7px 16px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.12s, transform 0.05s, box-shadow 0.12s, color 0.12s;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent-blue-strong), #1d4ed8);
+      color: #e5e7eb;
+      box-shadow:
+        0 12px 24px rgba(37,99,235,0.35),
+        0 0 0 1px rgba(59,130,246,0.9);
+    }
+
+    .btn-primary:hover {
+      background: linear-gradient(135deg, #1d4ed8, #1e40af);
+      transform: translateY(-1px);
+      box-shadow:
+        0 16px 28px rgba(37,99,235,0.45),
+        0 0 0 1px rgba(129,140,248,0.8);
+    }
+
+    .btn-secondary {
+      background: rgba(15,23,42,0.9);
+      color: var(--text-muted);
+      border: 1px solid rgba(75,85,99,0.9);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(17,24,39,0.9);
+      border-color: rgba(148,163,184,0.9);
+      color: var(--text-main);
+    }
+
+    .btn-primary:active,
+    .btn-secondary:active {
+      transform: translateY(0);
+      box-shadow: none;
+    }
+
+    .error-banner {
+      margin-top: 4px;
+      font-size: 0.75rem;
+      color: var(--danger);
+    }
+
+    .results-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 14px;
+    }
+
+    .chart-panel {
+      border-radius: 10px;
+      border: 1px solid rgba(55,65,81,0.9);
+      background: radial-gradient(circle at 10% 0%, rgba(30,64,175,0.3), transparent 60%), radial-gradient(circle at 80% 100%, rgba(15,23,42,0.9), rgba(3,7,18,0.98));
+      padding: 14px 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .chart-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .chart-title {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+    }
+
+    .chart-subtitle {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    canvas {
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+    }
+
+    .interpretation-panel {
+      margin-top: 10px;
+      padding: 8px 10px;
+      border-radius: 10px;
+      border: 1px solid rgba(55,65,81,0.9);
+      background: radial-gradient(circle at top left, rgba(15,23,42,0.95), rgba(15,23,42,0.98));
+      font-size: 0.85rem;
+      color: var(--text-main);
+    }
+
+    .interpretation-title {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+
+    .interpretation-code {
+      font-family: ui-monospace, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 0.8rem;
+      color: #a5b4fc;
+    }
+
+    @media (max-width: 900px) {
+      .main-grid { grid-template-columns: minmax(0, 1fr); }
+      .results-grid { grid-template-columns: minmax(0, 1fr); }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <div class="container">
+      <header>
+        <div class="title-block">
+          <div class="title">
+            AI Workforce Readiness Analyzer
+            <span class="title-chip">AI Workforce</span>
+          </div>
+          <div class="subtitle">
+            Describe how you are using AI for today, keeping both client-facing and internal use cases in mind. Also describe your approach, if any, to preparing your employees to work with AI.
+          </div>
+        </div>
+      </header>
+
+      <div class="main-grid">
+        <!-- Left: Input -->
+        <section class="panel">
+          <div class="panel-header">
+            <div class="panel-title">Describe your AI approach</div>
+          </div>
+          <textarea id="textInput" placeholder="Type or paste your description here..."></textarea>
+          <div class="controls-row">
+            <button class="btn-secondary" type="button" onclick="clearText()">Clear</button>
+            <button class="btn-primary" type="button" onclick="analyzeText()">Analyze</button>
+          </div>
+          <div id="errorBanner" class="error-banner" style="display:none;"></div>
+        </section>
+
+        <!-- Right: Results -->
+        <section class="panel">
+          <div class="results-grid">
+            <div class="chart-panel">
+              <div class="chart-header">
+                <div>
+                  <div class="chart-title">Radar View</div>
+                  <div class="chart-subtitle">Each spoke reflects one aspect of your AI focus.</div>
+                </div>
+              </div>
+              <canvas id="radarCanvas" width="500" height="500"></canvas>
+            </div>
+          </div>
+
+          <div class="interpretation-panel">
+            <div class="interpretation-title">Overall Orientation</div>
+            <div id="interpretationContent">
+              Your approach to AI in the workforce is even.
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Dimensions from sentimentsource.csv
+    let dimensions = [];
+    // Descriptions from descriptions1.csv: { code -> text }
+    let descriptionsMap = {};
+
+    const errorBanner = document.getElementById("errorBanner");
+    const interpEl = document.getElementById("interpretationContent");
+
+    window.addEventListener("load", () => {
+      loadDimensionsCsv();
+      loadDescriptionsCsv();
+    });
+
+    async function loadDimensionsCsv() {
+      try {
+        const resp = await fetch("sentimentsource.csv", { cache: "no-store" });
+        if (!resp.ok) throw new Error("HTTP status " + resp.status);
+        const text = await resp.text();
+        dimensions = parseDimensionsCsv(text);
+
+        if (dimensions.length !== 4) {
+          console.warn("sentimentsource.csv rows:", dimensions.length, "expected 4");
+        }
+
+        const scores = buildInitialScores();
+        drawRadarChart("radarCanvas", scores);
+        updateInterpretation(scores);
+      } catch (err) {
+        console.error("Error loading sentimentsource.csv:", err);
+        dimensions = [];
+        const scores = buildInitialScores();
+        drawRadarChart("radarCanvas", scores);
+        updateInterpretation(scores);
+      }
+    }
+
+    async function loadDescriptionsCsv() {
+      try {
+        const resp = await fetch("descriptions1.csv", { cache: "no-store" });
+        if (!resp.ok) throw new Error("HTTP status " + resp.status);
+        const text = await resp.text();
+        descriptionsMap = parseDescriptionsCsv(text);
+      } catch (err) {
+        console.error("Error loading descriptions1.csv:", err);
+        descriptionsMap = {};
+      }
+    }
+
+    function parseDimensionsCsv(csvText) {
+      const lines = csvText.split(/\r?\n/).filter(line => line.trim().length > 0);
+      const result = [];
+
+      for (const line of lines) {
+        const cols = line.split(",").map(c => c.trim());
+        if (cols.length < 2) continue;
+
+        const label = cols[0];
+        const rawWords = cols.slice(1).filter(w => w.length > 0);
+
+        const words = rawWords.map(w => ({
+          raw: w,
+          norm: w.toLowerCase().replace(/_/g, " ").replace(/\s+/g, " ").trim()
+        }));
+
+        result.push({ label, words });
+      }
+
+      return result;
+    }
+
+    function parseDescriptionsCsv(csvText) {
+      const lines = csvText.split(/\r?\n/).filter(line => line.trim().length > 0);
+      const map = {};
+
+      // Detect header
+      let startIndex = 0;
+      if (/code/i.test(lines[0]) && /text/i.test(lines[0])) {
+        startIndex = 1;
+      }
+
+      for (let i = startIndex; i < lines.length; i++) {
+        const line = lines[i];
+        const cols = line.split(",");
+        if (cols.length < 2) continue;
+        const code = cols[0].trim();
+        const text = cols.slice(1).join(",").trim();
+        if (code) {
+          map[code] = text;
+        }
+      }
+
+      return map;
+    }
+
+    function buildInitialScores() {
+      return dimensions.map(d => ({
+        label: d.label,
+        count: 0,
+        totalPossible: d.words.length
+      }));
+    }
+
+    function normalizeTextForMatching(text) {
+      return " " +
+        text
+          .toLowerCase()
+          .replace(/_/g, " ")
+          .replace(/[^a-z0-9\s]+/g, " ")
+          .replace(/\s+/g, " ")
+        + " ";
+    }
+
+    function computeScores(userText) {
+      const normalizedText = normalizeTextForMatching(userText);
+      const results = [];
+
+      for (const dim of dimensions) {
+        const uniqueNormWords = new Set(
+          dim.words.map(w => w.norm).filter(n => n.length > 0)
+        );
+        const totalPossible = uniqueNormWords.size || 1;
+
+        let count = 0;
+        for (const normWord of uniqueNormWords) {
+          const pattern = " " + normWord + " ";
+          if (normalizedText.includes(pattern)) {
+            count += 1;
+          }
+        }
+
+        results.push({
+          label: dim.label,
+          count,
+          totalPossible
+        });
+      }
+
+      return results;
+    }
+
+    function drawRadarChart(canvasId, scores) {
+      const canvas = document.getElementById(canvasId);
+      if (!canvas || !canvas.getContext) return;
+      const ctx = canvas.getContext("2d");
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      const width = canvas.width;
+      const height = canvas.height;
+      const centerX = width / 2;
+      const centerY = height / 2;
+      const radius = Math.min(width, height) * 0.38;
+
+      const numAxes = scores.length || 4;
+      const angleStep = (2 * Math.PI) / numAxes;
+
+      // Raw max match count
+      let rawMax = 0;
+      scores.forEach(s => {
+        if (s.count > rawMax) rawMax = s.count;
+      });
+
+      // Color band from raw max
+      let baseColor, fillColor, gridColor, axisColor, pointColor;
+      if (rawMax < 5) {
+        baseColor  = "#ef4444";
+        fillColor  = "rgba(239,68,68,0.25)";
+        gridColor  = "rgba(127,29,29,0.9)";
+        axisColor  = "rgba(127,29,29,0.9)";
+        pointColor = "#fecaca";
+      } else if (rawMax < 20) {
+        baseColor  = "#facc15";
+        fillColor  = "rgba(250,204,21,0.25)";
+        gridColor  = "rgba(133,77,14,0.85)";
+        axisColor  = "rgba(133,77,14,0.85)";
+        pointColor = "#fef3c7";
+      } else {
+        baseColor  = "#22c55e";
+        fillColor  = "rgba(34,197,94,0.25)";
+        gridColor  = "rgba(22,101,52,0.9)";
+        axisColor  = "rgba(22,101,52,0.9)";
+        pointColor = "#bbf7d0";
+      }
+
+      // Avoid divide-by-zero
+      const effectiveMax = rawMax > 0 ? rawMax : 1;
+
+      // Background
+      const radialBg = ctx.createRadialGradient(
+        centerX, centerY, 0,
+        centerX, centerY, radius * 1.25
+      );
+      radialBg.addColorStop(0, "rgba(15,23,42,0.4)");
+      radialBg.addColorStop(1, "rgba(15,23,42,0.95)");
+      ctx.fillStyle = radialBg;
+      ctx.fillRect(0, 0, width, height);
+
+      // Grid rings
+      ctx.strokeStyle = gridColor;
+      ctx.lineWidth = 1;
+      const rings = 4;
+      for (let i = 1; i <= rings; i++) {
+        const levelValue = (effectiveMax / rings) * i;
+        const r = radius * (levelValue / effectiveMax);
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, r, 0, 2 * Math.PI);
+        ctx.stroke();
+      }
+
+      // Axes + labels
+      ctx.font = "11px system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";
+      ctx.fillStyle = "#cbd5f5";
+
+      scores.forEach((s, i) => {
+        const angle = -Math.PI / 2 + i * angleStep;
+        const x = centerX + radius * Math.cos(angle);
+        const y = centerY + radius * Math.sin(angle);
+
+        // Axis line
+        ctx.strokeStyle = axisColor;
+        ctx.beginPath();
+        ctx.moveTo(centerX, centerY);
+        ctx.lineTo(x, y);
+        ctx.stroke();
+
+        // Label
+        const labelRadius = radius * 1.12;
+        const lx = centerX + labelRadius * Math.cos(angle);
+        const ly = centerY + labelRadius * Math.sin(angle);
+
+        ctx.textAlign = Math.abs(Math.cos(angle)) < 0.1
+          ? "center"
+          : (Math.cos(angle) > 0 ? "left" : "right");
+        ctx.textBaseline = Math.abs(Math.sin(angle)) < 0.1
+          ? "middle"
+          : (Math.sin(angle) > 0 ? "top" : "bottom");
+
+        ctx.fillText(s.label, lx, ly);
+      });
+
+      // Data polygon
+      ctx.beginPath();
+      scores.forEach((s, i) => {
+        const value = Math.max(0, s.count || 0);
+        const angle = -Math.PI / 2 + i * angleStep;
+        const r = radius * (value / effectiveMax);
+        const x = centerX + r * Math.cos(angle);
+        const y = centerY + r * Math.sin(angle);
+        if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+      });
+      ctx.closePath();
+
+      ctx.strokeStyle = baseColor;
+      ctx.lineWidth = 2.2;
+      ctx.stroke();
+
+      ctx.fillStyle = fillColor;
+      ctx.fill();
+
+      // Points
+      ctx.fillStyle = pointColor;
+      scores.forEach((s, i) => {
+        const value = Math.max(0, s.count || 0);
+        const angle = -Math.PI / 2 + i * angleStep;
+        const r = radius * (value / effectiveMax);
+        const x = centerX + r * Math.cos(angle);
+        const y = centerY + r * Math.sin(angle);
+        ctx.beginPath();
+        ctx.arc(x, y, 4, 0, 2 * Math.PI);
+        ctx.fill();
+      });
+    }
+
+    function updateInterpretation(scores) {
+      if (!scores || scores.length === 0) {
+        interpEl.textContent = "Your approach to AI in the workforce is even.";
+        return;
+      }
+
+      const counts = scores.map(s => s.count);
+      const minCount = Math.min(...counts);
+
+      if (minCount === 0 && counts.every(c => c === 0)) {
+        interpEl.textContent = "Your approach to AI in the workforce is even.";
+        return;
+      }
+
+      // Build pattern of H/L
+      const patternArr = counts.map(c => (c >= 2 * minCount ? "H" : "L"));
+      const pattern = patternArr.join("");
+
+      if (!pattern.includes("H")) {
+        interpEl.textContent = "Your approach to AI in the workforce is even.";
+        return;
+      }
+
+      const desc = descriptionsMap[pattern];
+      if (desc) {
+        interpEl.innerHTML = `<span class="interpretation-code">${pattern}</span> – ${desc}`;
+      } else {
+        interpEl.innerHTML = `<span class="interpretation-code">${pattern}</span> – No specific description found for this pattern.`;
+      }
+    }
+
+    function analyzeText() {
+      errorBanner.style.display = "none";
+      if (!dimensions || dimensions.length === 0) {
+        errorBanner.textContent = "Unable to analyze right now. Please check that the page is correctly loaded.";
+        errorBanner.style.display = "block";
+        return;
+      }
+      const text = document.getElementById("textInput").value.trim();
+      const scores = computeScores(text);
+      drawRadarChart("radarCanvas", scores);
+      updateInterpretation(scores);
+    }
+
+    function clearText() {
+      document.getElementById("textInput").value = "";
+      errorBanner.style.display = "none";
+      const scores = buildInitialScores();
+      drawRadarChart("radarCanvas", scores);
+      updateInterpretation(scores);
+    }
+  </script>
+</body>
+</html>
